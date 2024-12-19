@@ -81,7 +81,10 @@ RUN sudo mv ~/abin /opt/abin \
  && rm -rf ~/AFNI_* \
  && rm -rf ~/afni_* \
  && rm -rf ~/CD* \
- && rm -rf ~/suma_*
+ && rm -rf ~/suma_* \
+ && rm -rf OS_* \
+ && rm -rf o.*.txt \
+ && rm -rf std_meshes
 
 ENV PATH=/opt/abin:$PATH
 ENV R_LIBS=/opt/R
