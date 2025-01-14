@@ -36,4 +36,4 @@ val2014
 vqa_examples
 
 #kube secrets
-*secrets.yaml
+*secret*
