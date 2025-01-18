@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: afni-pod2
+  name: afni-pod
 spec:
   affinity:
     nodeAffinity:
@@ -23,7 +23,7 @@ spec:
       name: tend-lab-volume
   containers:
     - name: afni-container
-      image: kkricksdsu/tend-lab-notebook:v0.9.2
+      image: kkricksdsu/tend-lab-notebook:v0.10.0
       command: ["sh", "-c", "sleep infinity"]
       resources:
         limits:

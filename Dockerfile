@@ -90,9 +90,9 @@ ENV PATH=/opt/abin:$PATH
 ENV R_LIBS=/opt/R
 
 # Create the conda environment from the requirements file
-COPY requirements.yaml requirements.yaml
-RUN mamba env create -f requirements.yaml \
- && rm requirements.yaml
+COPY environment.yaml environment.yaml
+RUN mamba env update --file environment.yaml --prune\
+ && rm environment.yaml
 
 # Install conda kernels to register additional env
 RUN mamba install -y \
