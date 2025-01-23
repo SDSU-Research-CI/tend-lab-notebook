@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: afni-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: afni
+  template:
+    metadata:
+      labels:
+        app: afni
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+                - key: nautilus.io/csu-tide
+                  operator: Exists
+                - key: nvidia.com/gpu.product
+                  operator: In
+                  values:
+                  - NVIDIA-L40
+      initContainers:
+      - name: take-data-dir-ownership
+        image: alpine:3
+        command: ["/bin/sh","-c","chown 0:100 /home/jovyan && chmod 775 /home/jovyan"]
+        volumeMounts:
+        - mountPath: /home/jovyan
+          name: tend-lab-volume
+      containers:
+        - name: afni-container
+          image: kkricksdsu/tend-lab-notebook:v0.10.0
+          command: ["sh", "-c", "sleep infinity"]
+          resources:
+            limits:
+              cpu: "12"
+              memory: 32Gi
+              nvidia.com/gpu: "1"
+              ephemeral-storage: 100Gi
+            requests:
+              cpu: "10"
+              memory: 32Gi
+              nvidia.com/gpu: "1"
+              ephemeral-storage: 100Gi
+          volumeMounts:
+          - mountPath: /home/jovyan/shared/
+            name: tend-lab-volume
+          - name: rclone-config
+            mountPath: /home/jovyan/.config/rclone/
+          - mountPath: /dev/shm
+            name: dshm
+      volumes:
+      # - name: jovyan-home
+      #   persistentVolumeClaim:
+        # TODO: uncomment change the name of the pvc name below
+        # claimName: jupyter-volume-{change-name}
+      - name: tend-lab-volume
+        persistentVolumeClaim:
+          claimName: tend-lab-volume
+      - name: rclone-config
+        secret:
+          secretName: rclone-config-skrivonosov
+      - name: dshm
+        emptyDir:
+          medium: Memory
+      tolerations:
+      - key: nautilus.io/csu-tide
+        operator: Exists
+        effect: NoSchedule
+      - key: nautilus.io/sdsu-fix
+        operator: Exists
+        effect: NoSchedule
