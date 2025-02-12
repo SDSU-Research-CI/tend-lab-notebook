@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # change the name of the PVC
+  name: tend-lab-volume
+spec:
+  storageClassName: rook-cephfs-tide 
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 2500Gi

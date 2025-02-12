@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: afni-deployment
+  # each deployment should have a unique identifier, remove {username} and add your identifier (ex: sdsuid) 
+  name: afni-deployment-{username}
 spec:
   replicas: 1
   selector:
@@ -33,15 +34,18 @@ spec:
       containers:
         - name: afni-container
           image: kkricksdsu/tend-lab-notebook:v0.10.0
+          # Uncomment and change to the command you want to use
+          # command: ["python", "/home/jovyan/shared/scripts/htfa.py"]
           command: ["sh", "-c", "sleep infinity"]
           resources:
+          # if you see a issue with node taints, please review avaiable resources and change to appropriate resources below
             limits:
-              cpu: "12"
+              cpu: "6"
               memory: 32Gi
               nvidia.com/gpu: "1"
               ephemeral-storage: 100Gi
             requests:
-              cpu: "10"
+              cpu: "4"
               memory: 32Gi
               nvidia.com/gpu: "1"
               ephemeral-storage: 100Gi
@@ -55,8 +59,9 @@ spec:
       volumes:
       # - name: jovyan-home
       #   persistentVolumeClaim:
-        # TODO: uncomment change the name of the pvc name below
+        # TODO: uncomment change the name of the pvc name below if you have a personal PVC
         # claimName: jupyter-volume-{change-name}
+      # shared PVC for the lab
       - name: tend-lab-volume
         persistentVolumeClaim:
           claimName: tend-lab-volume
