@@ -4,7 +4,7 @@ This is how you deploy the pods to the namespace.
 
 ### Step 1: Set Context (Optional)
 
-If you wish to not pass the namespace name for each command, run the following to set the namespace context:
+Optional: If you wish to not pass the namespace name for each command, run the following to set the namespace context:
 
 ```
 kubectl config set-context nautilus --namespace=sdsu-tend-lab
@@ -14,7 +14,7 @@ Note: All the example below still include the `-n NAMESPACE` for reference.
 
 ### Step 2: Create Personal Volume/PVC (skip this if you already have storage configured for your pod)
 
-IMPORTANT TODO: Create a copy of the volume.yaml file and modify the "volume-{change name}" name in the file (line 5) replacing "username" with your username. If you don't do this, you will not have your own volume/PVC where your files are stored.
+Optional: Create a copy of the volume.yaml file and modify the "volume-{change name}" name in the file (line 5) replacing "username" with your username. If you don't do this, you will not have your own volume/PVC where your files are stored.
 
 ```
 kubectl create -f volume.yaml -n sdsu-tend-lab
